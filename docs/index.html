@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <script src="jquery-3.7.1.min.js"></script>
+    </head>
+    <body>
+        <form id="fileForm">
+            <input type="text" value="Sausages!" id="textInput">
+            <button type="submit">Text in Solid Pod hinzufügen</button>
+        </form>
+        <div id="output"></div>
+    </body>
+    <script>
+    const fileForm = document.getElementById('fileForm');
+    fileForm.addEventListener('submit', inputFileTest);
+    function inputFileTest() {
+        event.preventDefault();
+        const input = document.getElementById('textInput');
+        const file = input.files[0];
+        // red content of file
+        reader = new FileReader();
+        reader.onload = function(e) {
+            const result = e.target.result
+            parseJsonld(result)// e.target.result should contain the text
+        };
+        const text = reader.readAsText(file);
+    }
+    let sausageText = "<http://example.org/krakauer> <http://example.org/a> <http://example.org/wurst> .";
+    // use jquery ajax with success and error to read url example.com
+    $.ajax({
+        url: 'https://restaurierungsvokabular.solidweb.org/wuerste/krakauer.ttl',
+        type: 'GET',
+        success: function(data) {
+          document.getElementById('output').innerHTML = data;
+            console.log(data);
+        },
+        error: function(data) {
+            console.log('Error:', data);
+        }
+    });
+
+    //use jquery ajax with success and error to write text to url example.com. Use MIME type text/turtle
+    $.ajax({
+        url: 'https://restaurierungsvokabular.solidweb.org/wuerste/krakauer.ttl',
+        type: 'PUT',
+        data: sausageText,
+        contentType: 'text/turtle',
+        success: function(data) {
+            console.log(data);
+        },
+        error: function(data) {
+            console.log('Error:', data);
+        }
+    });
+    </script>
+</html>
