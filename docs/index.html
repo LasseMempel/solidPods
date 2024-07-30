@@ -37,10 +37,9 @@
     podForm.addEventListener('submit', inputPodTest);
     function inputPodTest() {
         event.preventDefault();
-        const input = document.getElementById('podText');
-        input.value = readFromPod();   
+        readFromPod();   
     }
-    
+
     function writeToPod(sausageText){
     $.ajax({
         url: 'https://restaurierungsvokabular.solidweb.org/wuerste/krakauer.ttl',
@@ -61,15 +60,13 @@ function readFromPod(){
         url: 'https://restaurierungsvokabular.solidweb.org/wuerste/krakauer.ttl',
         type: 'GET',
         success: function(data) {
-            return data
-            //document.getElementById('output').innerHTML = data;
             console.log(data);
+            document.getElementById('podText').value = data;
         },
         error: function(data) {
             console.log('Error:', data);
         }
     }); 
 }
-
     </script>
 </html>
