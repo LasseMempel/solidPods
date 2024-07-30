@@ -3,7 +3,13 @@
     <head>
       <script src="jquery-3.7.1.min.js"></script>
     </head>
+    <!-- insert textfield --> 
     <body>
+        <form id="podForm">
+            <input type="text"  id="podText">
+            <button type="submit">Text aus Solid Pod lesen</button>
+        </form>
+        <br>
         <form id="fileForm">
             <input type="text" value="&lt;http://example.org/Lyoner&gt; &lt;http://example.org/a&gt; &lt;http://example.org/wurst&gt;." id="textInput">
             <button type="submit">Text in Solid Pod hinzufügen</button>
@@ -16,32 +22,26 @@
     function inputFileTest() {
         event.preventDefault();
         const input = document.getElementById('textInput');
-        const file = input.files[0];
-        // red content of file
+        const text = input.value;
+        writeToPod(text)
+        /*
         reader = new FileReader();
         reader.onload = function(e) {
             const result = e.target.result
             writeToPod(result)// e.target.result should contain the text
         };
         const text = reader.readAsText(file);
+        */
     }
-    //let sausageText = "<http://example.org/krakauer> <http://example.org/a> <http://example.org/wurst> .";
-    //let sausageText = "<http://example.org/Lyoner> <http://example.org/a> <http://example.org/wurst> .";
-    // use jquery ajax with success and error to read url example.com
+    const podForm = document.getElementById('podForm');
+    podForm.addEventListener('submit', inputPodTest);
+    function inputPodTest() {
+        event.preventDefault();
+        const input = document.getElementById('podText');
+        input.value = readFromPod();   
+    }
+    
     function writeToPod(sausageText){
-    $.ajax({
-        url: 'https://restaurierungsvokabular.solidweb.org/wuerste/krakauer.ttl',
-        type: 'GET',
-        success: function(data) {
-          document.getElementById('output').innerHTML = data;
-            console.log(data);
-        },
-        error: function(data) {
-            console.log('Error:', data);
-        }
-    });
-
-    //use jquery ajax with success and error to write text to url example.com. Use MIME type text/turtle
     $.ajax({
         url: 'https://restaurierungsvokabular.solidweb.org/wuerste/krakauer.ttl',
         type: 'PUT',
@@ -49,11 +49,27 @@
         contentType: 'text/turtle',
         success: function(data) {
             console.log(data);
+            document.getElementById('output').innerHTML = "Data added...";
         },
         error: function(data) {
             console.log('Error:', data);
         }
     });
     }
+function readFromPod(){
+    $.ajax({
+        url: 'https://restaurierungsvokabular.solidweb.org/wuerste/krakauer.ttl',
+        type: 'GET',
+        success: function(data) {
+            return data
+            //document.getElementById('output').innerHTML = data;
+            console.log(data);
+        },
+        error: function(data) {
+            console.log('Error:', data);
+        }
+    }); 
+}
+
     </script>
 </html>
