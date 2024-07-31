@@ -2,11 +2,11 @@
 <html>
     <head>
       <script src="jquery-3.7.1.min.js"></script>
-    </head>
-    <!-- insert textfield --> 
+    </head> 
     <body>
         <form id="podForm">
-            <input type="text"  id="podText">
+            <!-- make input textfield big with at least 3 linebreaks -->
+            <textarea type="text" id="podText"> </textarea>
             <button type="submit">Text aus Solid Pod lesen</button>
         </form>
         <br>
@@ -24,14 +24,6 @@
         const input = document.getElementById('textInput');
         const text = input.value;
         writeToPod(text)
-        /*
-        reader = new FileReader();
-        reader.onload = function(e) {
-            const result = e.target.result
-            writeToPod(result)// e.target.result should contain the text
-        };
-        const text = reader.readAsText(file);
-        */
     }
     const podForm = document.getElementById('podForm');
     podForm.addEventListener('submit', inputPodTest);
@@ -39,10 +31,16 @@
         event.preventDefault();
         readFromPod();   
     }
-
+    // use username and password to authenticate ajax put request
+    const username = 'restaurierungsvokabular';
+    const password = 'hPYf!HCE6pz8ys';
+    const auth = 'Basic ' + btoa(username + ':' + password);
     function writeToPod(sausageText){
     $.ajax({
         url: 'https://restaurierungsvokabular.solidweb.org/wuerste/krakauer.ttl',
+        headers: {
+            'Authorization': auth
+        },
         type: 'PUT',
         data: sausageText,
         contentType: 'text/turtle',
