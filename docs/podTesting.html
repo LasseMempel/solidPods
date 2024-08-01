@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.3.0/dist-lib/solid-auth-client.bundle.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/solid-file-client@1.0.0/dist/window/solid-file-client.bundle.js"></script>
+    </head> 
+    <body>
+        <form id="podForm">
+            <!-- make input textfield big with at least 3 linebreaks -->
+            <textarea type="text" id="podText"> </textarea>
+            <button type="submit">Text aus Solid Pod lesen</button>
+        </form>
+        <br>
+        <form id="fileForm">
+            <input type="text" value="&lt;http://example.org/Lyoner&gt; &lt;http://example.org/a&gt; &lt;http://example.org/wurst&gt;." id="textInput">
+            <button type="submit">Text in Solid Pod hinzufügen</button>
+        </form>
+        <div id="output"></div>
+    </body>
+    <script>
+    const podForm = document.getElementById('podForm');
+    podForm.addEventListener('submit', inputPodTest);
+    function inputPodTest() {
+        event.preventDefault(); 
+        let podText = readFromPod();
+        document.getElementById('podText').value = podText
+    }
+    const fileForm = document.getElementById('fileForm');
+    fileForm.addEventListener('submit', inputFileTest);
+    function inputFileTest() {
+        event.preventDefault();
+        const input = document.getElementById('textInput');
+        const text = input.value;
+        writeToPod(text)
+    }
+    let writeToPod = (sausageText) => {
+    let podText = readFromPod();
+    $.ajax({
+        url: 'https://restaurierungsvokabular.solidweb.org/wuerste/krakauer.ttl',
+        /*
+        headers: {
+            'Authorization': auth
+        },
+        */
+        type: 'PUT',
+        data: podText + sausageText,
+        contentType: 'text/turtle',
+        success: function(data) {
+            console.log(data);
+            document.getElementById('output').innerHTML = "Data added...";
+        },
+        error: function(data) {
+            console.log('Error:', data);
+        }
+    });
+    }
+    let readFromPod = () =>{
+    $.ajax({
+        url: 'https://restaurierungsvokabular.solidweb.org/wuerste/krakauer.ttl',
+        type: 'GET',
+        contentType: 'text/turtle',
+        //async: false,
+        success: function(data) {
+            console.log(data);
+            return data;
+        },
+        error: function(data) {
+            console.log('Error:', data);
+        }
+    }); 
+}
+    </script>
+</html>
