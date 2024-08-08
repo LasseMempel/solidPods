@@ -38,10 +38,11 @@
         async function writeTrigger() {
             event.preventDefault();
             const preText = await readFromPod(url)
+            console.log(preText);
             const commentry =  document.getElementById("textInput").value;
             const commenter = document.getElementById("commenterInput").value;
             const concept = document.getElementById("conceptInput").value;
-            const newText = writeRdf(preText,commenter,concept,commentry, url);
+            const newText = preText+commenter+concept+commentry;
             console.log(newText);
             writeToPod(newText,url);
         }
