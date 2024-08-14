@@ -68,14 +68,14 @@ async function updatePod(url) {
     $rdf.parse(preRdf, store, url, 'text/turtle')
 
     //create new annotation
-    anno2 = $rdf.sym("https://restaurierungsvokabular.solidweb.org/annotations/annotations.ttl/anno2")
-    concept1 = $rdf.sym("https://restaurierungsvokabular.solidweb.org/annotations//concept1")
+    anno2 = $rdf.sym("https://restaurierungsvokabular.solidweb.org/annotations/annotations.ttl/anno1")
+    concept1 = $rdf.sym("https://restaurierungsvokabular.solidweb.org/annotations/top")
 
     // add annotation to store
     store.add(anno2, RDF('type'), AO('Annotation'))
     store.add(concept1, RDF('type'), SK('Concept'))
-    store.add(anno2, comment, 'I disapprove this definition as well!')
-    store.add(anno2, creator, 'Lasse Mempel')
+    store.add(anno2, comment, 'Der LEIZA Thesaurus zum Kommentieren!')
+    store.add(anno2, creator, 'Lasse Mempel-Länger')
     store.add(anno2, created, new Date().toISOString())
     store.add(anno2, target, concept1)
 
@@ -86,6 +86,5 @@ async function updatePod(url) {
     writeToPod(ttl, url)
 }
 
-const url = 'https://restaurierungsvokabular.solidweb.org/annotations/annotations.ttl';
-updatePod(url)
-
+//const url = 'https://restaurierungsvokabular.solidweb.org/annotations/annotations.ttl';
+//updatePod(url)
